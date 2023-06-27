@@ -1,0 +1,43 @@
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+    "name":"filety z kurczka",
+    "quantity":1
+}
+###
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+    "name":"kartofle",
+    "quantity":1
+}
+###
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+    "name":"szparagi",
+    "quantity":1
+}
+###
+GET http://localhost:8080/api/products
+
+###
+
+GET http://localhost:8080/api/products/1
+
+###
+GET http://localhost:8080/api/products/rq_amount
+###
+PUT http://localhost:8080/api/products/1
+Content-Type: application/json
+
+{
+    "name":"kartofle",
+    "quantity":2
+}
+###
+DELETE http://localhost:8080/api/products/1
+###
