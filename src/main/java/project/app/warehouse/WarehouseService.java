@@ -27,10 +27,14 @@ public class WarehouseService {
     public List<Product> findAll(){
         return repository.findAll();
     }
+    
+    public List<Product> findByNameContains(String query){
+        return repository.findByNameContains(query);
+    }
 
     @Transactional
-    public void save(Product product){
-        repository.save(product);
+    public Product save(Product product){
+        return repository.save(product);
     }
 
     @Transactional
@@ -39,13 +43,16 @@ public class WarehouseService {
     }
 
     @Transactional
-    public void update(Product product){
-        repository.findById(product.getId())
-            .ifPresent(
+    public Optional<Product> update(Product product){
+        Optional<Product> opt = repository.findById(product.getId());
+            opt.ifPresent(
                 raport -> {
                     raport.setName(product.getName());
                     raport.setQuantity(product.getQuantity());
+                    
+                    repository.save(raport);
                 });
+        return opt;
     }
 
 }

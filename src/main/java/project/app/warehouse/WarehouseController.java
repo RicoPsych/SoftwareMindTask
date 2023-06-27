@@ -53,6 +53,15 @@ public class WarehouseController {
         return ResponseEntity.ok(GetAllProductsResponse.entityToDtoMapper().apply(products));
     }
 
+    @GetMapping("find/{query}")
+    public ResponseEntity <GetAllProductsResponse> getQueriedProducts(@PathVariable("query") String query){
+        requestsAmount++;
+        List<Product> products = service.findByNameContains(query);
+
+        return ResponseEntity.ok(GetAllProductsResponse.entityToDtoMapper().apply(products));
+    }
+
+
     @GetMapping("rq_amount")
     public ResponseEntity <Integer> getRequestsAmount(){
         //requestsAmount++;

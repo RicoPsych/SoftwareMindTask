@@ -26,12 +26,12 @@ function App() {
       <header><Title /></header>
       <div className="App" style={list_style}>
         <AddProductButton setSite={setSite}/>
+        <FindProductModule setSite={setSite}/>
         <ListProducts list={list} setList={setList} setSite={setSite}/></div>
       <div className="App" style={div_style}>{site}</div>
     </div>
   );
 }
-
 
 function Title() {
   return <h1>Warehouse</h1>;
@@ -40,6 +40,80 @@ function Title() {
 function AddProductButton(props){
   return <button onClick={() => props.setSite(<ProductDetailsAddView />)}>Add Product</button>
 }
+
+function FindProductModule(props){
+  const [query, setQuery] = useState("");
+
+  return <div><input type="text" id="query" name="query" onChange={(event) => setQuery(event.target.value)}/>
+  <button onClick={()=>GetProductsByName(query, props.setSite)}>Find</button></div>
+}
+
+
+function ListQueriedProducts(props){
+  const [productsList, setList] = useState([]);
+  const [reverseSort, setSorting] = useState(false);
+  //const [data, setData] = useState(props.products)
+  var data;
+  useEffect(() => {
+    sortList("id");
+  }, []);
+
+  
+
+  const printList = () =>{
+    let new_products = [];
+    for (let i = 0; i < data.length; i++){
+      new_products.push(<ProductInList product={data[i]} setSite={props.setSite}/>);
+    }
+    setList(new_products);
+  }
+
+  const sortList = (sorting) => {
+    data = props.products;
+    if(sorting == "name"){
+      if (reverseSort == false){
+        data.sort((a,b) => (a.name > b.name) ? 1 : -1);
+      }
+      else{
+        data.sort((a,b) => (a.name < b.name) ? 1 : -1);
+      }
+    }
+    else if (sorting == "id"){
+      if (reverseSort  == false){
+        data.sort((a,b) => (a.product_id > b.product_id) ? 1 : -1);
+      }
+      else{
+        data.sort((a,b) => (a.product_id < b.product_id) ? 1 : -1);
+      }
+    }
+    
+    setSorting(!reverseSort);
+    printList();
+  }
+
+
+  let tableHead = <tr>
+    <th><button onClick={() => { sortList("id"); }}>ID</button></th>
+    <th><button onClick={() => { sortList("name"); }}>Name</button></th>
+    <th>Details</th></tr>;
+  return (
+    <table>
+      <thead>{tableHead}</thead>
+      <tbody>{productsList}</tbody>
+    </table>);
+}
+
+function GetProductsByName(query, setSite){
+  const dataFetch = async () => {
+    const data = await (
+      await fetch("http://localhost:8080/api/products/find/"+query)
+    ).json();
+    console.log(data);
+    setSite(<ListQueriedProducts products={data.products} setSite={setSite} update={false}/>);
+  };
+  dataFetch();
+}
+
 
 function ListProducts(props) {
   let data = props.list;

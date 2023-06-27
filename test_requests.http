@@ -19,13 +19,15 @@ Content-Type: application/json
 
 {
     "name":"szparagi",
-    "quantity":1
+    "quantity":3
 }
 ###
 GET http://localhost:8080/api/products
 
 ###
+GET http://localhost:8080/api/products/find/szpar
 
+###
 GET http://localhost:8080/api/products/1
 
 ###
